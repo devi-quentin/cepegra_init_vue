@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+    <title>Vue projet 6</title>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <section>
+        <h1>Qui êtes-vous ?</h1>
+        <form ref="addPerson" action="" @submit.prevent.stop="addPerson">
+            <input type="text" v-model.trim="newPerson.prenom" placeholder="prénom"/>
+            <input type="text" v-model.trim="newPerson.nom" placeholder="nom"/>
+            <input type="number" v-model.trim="newPerson.age" placeholder="age"/>
+          <button>Ajouter</button>
+        </form>
+      </section>
+
+      <p v-if="personnel.length > 0" v-for="p in personnel">{{p.prenom}} a {{ p.age }} ans</p>
+      <p v-else>Vide</p>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      const app = Vue.createApp({
+        name: "App",
+        data() {
+          return {
+            newPerson: {
+                nom: "",
+                prenom: "",
+                age: ""
+            },
+            personnel: []
+          };
+        },
+        created() {
+            if(localStorage.personnel) {
+                this.personnel = JSON.parse(localStorage.personnel)
+            }
+        },
+        methods: {
+            addPerson() {
+                this.personnel.push({...this.newPerson})
+                localStorage.setItem("personnel", JSON.stringify(this.personnel));
+                this.$refs.addPerson.reset()
+                this.newPerson = {
+                    nom: "",
+                    prenom: "",
+                    age: ""
+                }
+            }
+        }
+      }).mount("#app");
+    </script>
+  </body>
+</html>

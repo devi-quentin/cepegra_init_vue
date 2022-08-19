@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+      ul {
+        padding: 0;
+      }
+      .tache {
+        border: 1px solid;
+        display: block;
+        width: fit-content;
+        padding: .5rem 1rem;
+        list-style: none;
+        margin: none;
+        margin-bottom: .5rem;
+        border-radius: .3rem;
+        cursor: pointer;
+      }
+
+      .tache.done {
+        border-color: green;
+        background-color: rgba(0,255,0,.2);
+      }
+    </style>
+    <title>Todolist - Vue projet 7</title>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <section>
+        <h1>TODO list</h1>
+
+        <!-- Formulaire -->
+        <form ref="ajoutTache" action="" @submit.prevent.stop="ajoutTache">
+          <input type="text" v-model.trim="tache.label" placeholder="tache"/>
+          <button v-if="tache.label != ''">Ajouter à la liste</button>
+        </form>
+
+        <!-- Todolist -->
+        <ul v-if="listeDesTache.length > 0">
+          <li :key="index" :data-key="index" class="tache" :class="{done:t.done}" v-for="(t, index) in listeDesTache" @click="toggleDone(t, index)">{{ t.label }}</li>
+        </ul>
+
+        <!-- A afficher si liste vide -->
+        <p v-else>Aucune tâche enregistrée</p>
+      </section>
+    </div>
+
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>
+      const app = Vue.createApp({
+        name: "App",
+        data() {
+          return {
+            tache: {
+              label: "",
+              done: false
+            },
+            listeDesTache: []
+          };
+        },
+        created() {
+            if(localStorage.listeDesTache) {
+                this.listeDesTache = JSON.parse(localStorage.listeDesTache)
+            }
+        },
+        methods: {
+          // Ajout d'une tache
+          ajoutTache() {
+                this.listeDesTache.push({...this.tache})
+                localStorage.setItem("listeDesTache", JSON.stringify(this.listeDesTache))
+                this.$refs.ajoutTache.reset()
+                this.tache = {
+                  label: "",
+                  done: false
+                }
+            },
+            // Changement d'état de la tache (faite ou pas faite)
+            toggleDone(tache, index) {
+              // Toggle de l'état
+              tache.done = !tache.done
+              // On modifie dans l'array d'objets
+              this.listeDesTache[index].done = tache.done
+              // Sauvegarde dans LocalStorage          
+              localStorage.setItem("listeDesTache", JSON.stringify(this.listeDesTache))
+            }
+        }
+      }).mount("#app");
+    </script>
+  </body>
+</html>

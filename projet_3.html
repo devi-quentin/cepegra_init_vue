@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <title>Vue projet 1</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <section>
+            <img  @mouseover="toggle" :src="url_image" alt="Image 1">
+            <p>{{texteBrut}}</p>
+            <p v-html="texteHTML"></p>
+        </section>
+    </div>
+    
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>        
+        const app = Vue.createApp({
+            name: "App",
+            data() {
+                return {
+                    url_2: "https://picsum.photos/id/1/200/100",
+                    url_1: "https://picsum.photos/id/2/200/100",
+                    url_image: "",
+                    image_affichee: 1,
+                    texteBrut: "lorem ipsum dolor sit amet, consectetur adipiscing",
+                    texteHTML: "<strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing"
+                }
+            },
+            created() {
+                this.url_image = this.url_1
+            },
+            methods: {
+                toggle() {
+                    this.image_affichee = this.image_affichee == 1 ? 2 : 1
+                    this.url_image = this.image_affichee == 1 ? this.url_1 : this.url_2
+                }
+            }
+        }).mount('#app')
+
+        setTimeout(() => {
+            app.texteBrut = "Nouveau texte"
+        }, 2000)
+    </script>
+</body>
+</html>

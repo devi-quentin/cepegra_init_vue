@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+    <title>Vue projet 1</title>
+</head>
+<body>
+    <div id="app" v-cloak>
+        <section>
+            <p>Date format FR : {{ dateFr }}</p>
+            <p>Date format US : {{ dateUs }}</p>
+            <button @click="refreshDate">Refresh date</button>
+        </section>
+    </div>
+    
+    <script src="https://unpkg.com/vue@next"></script>
+    <script>        
+        const app = Vue.createApp({
+            name: "AppQuentin",
+            data() {
+                return {
+                    date: new Date()
+                }
+            },
+            computed: {
+                dateFr() {
+                    return this.date.toLocaleTimeString("fr-FR")
+                },
+                dateUs() {
+                    return this.date.toLocaleTimeString("en-US")
+                }
+            },
+            methods: {
+                refreshDate() {
+                    this.date = new Date()
+                }
+            }
+        })
+        app.mount('#app')
+    </script>
+</body>
+</html>
